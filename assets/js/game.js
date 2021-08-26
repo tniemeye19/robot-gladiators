@@ -11,26 +11,47 @@ var randomNumber = function(min, max) {
     return value;
 };
 
+var fightOrSkip = function() {
+    // Ask player if they'd like to fight or skip using fightOrSkip function
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    
+    promptFight = promptFight.toLowerCase();
+
+    if (promptFight === "skip") {
+
+    }
+    // Conditional Recursive Function Call
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again!");
+        return fightOrSkip();
+    }
+
+    if (promptFight === "skip" || promptFight === "SKIP") {
+        // Confirm player wants to skip
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+        // If yes (true), leave fight
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            // Subtract money from playerInfo.money for skipping
+            playerInfo.money = Math.max(0, playerInfo.money - 10);
+
+            // Return true if player wants to leave
+            return true;
+        }
+    }
+}
+
 // Fight function
 var fight = function(enemy) {
 
     // Repeat and execute as long as the enemy-robot is alive
     while (playerInfo.health > 0 && enemy.health > 0) {
-        // Ask player if they'd like to fight or run
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-        
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            // Confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
 
-            // If yes (true), leave fight
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-                // Subtract money from playerInfo.money for skipping
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money);
-                break;
-            }
+        // Ask player if they'd like to fight or skip using fightOrSkip function
+        if (fightOrSkip()) {
+            // If true, leave fight by breaking loop
+            break;
         }
 
         // Generate random damage value based on player's attack power
@@ -49,8 +70,8 @@ var fight = function(enemy) {
 
             // Leave while() loop since enemy is dead
             break;
-            } else {
-                window.alert(enemy.name + " still has " + enemy.health + " health left.");
+        } else {
+            window.alert(enemy.name + " still has " + enemy.health + " health left.");
         }
 
         // Generate random damage value base on enemy's attack power
@@ -65,7 +86,7 @@ var fight = function(enemy) {
             window.alert(playerInfo.name + " has died!");
             // Leave while() loop if player is dead
             break;
-            } else {
+        } else {
                 window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
         }
     }
@@ -85,7 +106,7 @@ var startGame = function() {
 
             // Let player know what round they are in, remember that arrays start at 0 so it needs to have 1 added to it
             window.alert("Welcome to Robot Gladiators! Round " + (i + 1) );
-            debugger;
+            
             // Pick new enemy to fight based on the index of the enemy.names array
             var pickedEnemyObj = enemyInfo[i];
 
@@ -98,19 +119,19 @@ var startGame = function() {
             // If player is still alive and we're not at the last enemy in the array
             if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
 
-            // Ask player if they want to use the store before the next round
-            var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
+                // Ask player if they want to use the store before the next round
+                var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
 
-                // If yes, take them to the store() function
-                if (storeConfirm) {
-                    shop();
-                }
+                    // If yes, take them to the store() function
+                    if (storeConfirm) {
+                        shop();
+                    }
             } 
         } 
         // If player is not alive, break out of the loop and let endGame function run
         else {
             window.alert("You have lost your robot in battle! Game over!");
-        break;
+            break;
         }
     }
 
